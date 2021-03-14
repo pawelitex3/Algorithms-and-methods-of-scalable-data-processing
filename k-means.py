@@ -1,5 +1,8 @@
 import sys
 import math
+import matplotlib.pyplot as plt
+import numpy as np
+import random
 
 points = []
 
@@ -8,6 +11,11 @@ for line in f:
     line = line.replace("\n", "")
     x, y = line.split(" ")
     points.append((float(x), float(y)))
+
+# for i in range(1000):
+#     x = random.randint(0, 30)
+#     y = random.randint(0, 30)
+#     points.append((float(x), float(y)))
 
 centres = []
 for i in range(3):
@@ -44,7 +52,23 @@ while change:
             centres.append([averages[i]])
     else:
         change = False
-    
 
-print(centres)
+ 
+x, y = zip(*centres[0][1:])
+plt.scatter(x, y)
+x, y = zip(*centres[1][1:])
+plt.scatter(x, y)
+x, y = zip(*centres[2][1:])
+plt.scatter(x, y)
+p = []
+p.append(centres[0][0])
+p.append(centres[1][0])
+p.append(centres[2][0])
+x, y = zip(*p)
+plt.scatter(x, y) 
+
+plt.show()
 print(iterations)
+for i in range(3):
+    print(f"centroid: {centres[i][0]}\tpoints:{centres[i][1:]}")
+
