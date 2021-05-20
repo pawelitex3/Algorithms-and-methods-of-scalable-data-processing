@@ -1,11 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.mllib.linalg import Vectors
-import numpy as np
-import os
 import sys
-
-strip_size = 2
-
 
 def Map(r):
     global n
@@ -31,22 +25,21 @@ def Reduce(r):
 
 if __name__ == "__main__":
 
-    global matrix, vector, spark, n
+    global n
     spark = SparkSession.builder.appName("Matrix").getOrCreate()
 
     n = int(sys.argv[1])
 
-    matrix_A = spark.read.text("Matrix_A").rdd\
+    matrix_A = spark.read.text(sys.argv[2]).rdd\
         .map(lambda line: tuple(line[0].split(";")))\
         .map(lambda r: (r[0], int(r[1]), int(r[2]), float(r[3])))
 
-    matrix_B = spark.read.text("Matrix_B").rdd\
+    matrix_B = spark.read.text(sys.argv[3]).rdd\
         .map(lambda line: tuple(line[0].split(";")))\
         .map(lambda r: (r[0], int(r[1]), int(r[2]), float(r[3])))
 
     matrix_C = matrix_A.union(matrix_B).flatMap(Map).groupByKey().flatMap(Reduce)
     
     print(matrix_C.collect())
-    #print(matrix_B.collect())
 
     spark.stop()

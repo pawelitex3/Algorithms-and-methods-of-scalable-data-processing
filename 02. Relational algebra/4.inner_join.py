@@ -25,7 +25,7 @@ def Reduce(x):
 if __name__ == "__main__":
 
     if len(sys.argv) != 2:
-        print("Usage: wordcount <file>", file=sys.stderr)
+        print("Niepoprawna liczba argumentów", file=sys.stderr)
         exit(-1)
 
     spark = SparkContext(appName="inner_join")

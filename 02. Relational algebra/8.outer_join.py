@@ -20,23 +20,23 @@ def Reduce(x):
     if outer.lower() == "left":
         for customer in values:
             if customer[0] == "Customers":
-                matched = True
+                notMatched = True
                 for order in values:
                     if order[0] == "Orders":
                         v.append((customer[0], key, customer[1], customer[2], customer[3], order[0], order[1], key, order[2]))
-                        matched = False
-                if matched:
+                        notMatched = False
+                if notMatched:
                     v.append((customer[0], key, customer[1], customer[2], customer[3], "NULL"))
         return v
     elif outer.lower() == "right":
         for order in values:
             if order[0] == "Orders":
-                matched = True
+                notMatched = True
                 for customer in values:
                     if customer[0] == "Customers":
                         v.append((customer[0], key, customer[1], customer[2], customer[3], order[0], order[1], key, order[2]))
-                        matched = False
-                if matched:
+                        notMatched = False
+                if notMatched:
                     v.append(("NULL", order[0], order[1], key, order[2]))
         return v
     return []
@@ -45,7 +45,7 @@ def Reduce(x):
 if __name__ == "__main__":
 
     if len(sys.argv) != 3:
-        print("Usage: wordcount <file>", file=sys.stderr)
+        print("Niepoprawna liczba argumentów", file=sys.stderr)
         exit(-1)
 
     spark = SparkContext(appName="outer_join")

@@ -1,10 +1,7 @@
 from pyspark.sql import SparkSession
-from pyspark.mllib.linalg import Vectors
 import numpy as np
-import os
 import sys
 
-strip_size = 2
 
 def Map(r):
     global vector
@@ -15,9 +12,9 @@ def Reduce(r):
     return (r[0], sum(r[1]))
 
 
-def read_vector():
+def read_vector(vector_path):
     global vector
-    vector_file = open("v1", "r")
+    vector_file = open(vector_path, "r")
     lines = vector_file.readlines()
     for line in lines:
         line = line.split(";")
@@ -26,15 +23,17 @@ def read_vector():
 
 if __name__ == "__main__":
 
-    global matrix, vector, spark, n
+    global vector
     spark = SparkSession.builder.appName("Matrix").getOrCreate()
 
-    matrix = spark.read.text("M1").rdd.map(lambda line: tuple(line[0].split(";"))).map(lambda r: (int(r[0]), int(r[1]), float(r[2])))
-    n = int(sys.argv[1])
-    vector = np.zeros(n)
-    read_vector()
+    matrix = spark.read.text(sys.argv[2]).rdd\
+        .map(lambda line: tuple(line[0].split(";")))\
+        .map(lambda r: (int(r[0]), int(r[1]), float(r[2])))
+    vector = np.zeros(int(sys.argv[1]))
+    read_vector(sys.argv[3])
 
     result = matrix.flatMap(Map).groupByKey().map(Reduce)
+    
     print(result.collect())
 
     spark.stop()
