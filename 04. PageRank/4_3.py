@@ -98,12 +98,12 @@ def remove_old_files(path):
 if __name__ == "__main__":
 
     global beta, S, n, files_list, current_slice_number, current_vector_slice
-    spark = SparkSession.builder.appName("Matrix").getOrCreate()
+    spark = SparkSession.builder.appName("PageRank").getOrCreate()
 
     files_list = set()
     n = int(sys.argv[2])
     beta = 0.8
-    S = {2}
+    S = {0}
     current_slice_number = -1
 
     current_vector_slice = dict()

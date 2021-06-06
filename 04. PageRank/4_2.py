@@ -25,7 +25,7 @@ def fraction_to_float(fraction):
 if __name__ == "__main__":
 
     global vector, beta, n
-    spark = SparkSession.builder.appName("Matrix").getOrCreate()
+    spark = SparkSession.builder.appName("PageRank").getOrCreate()
 
     matrix = spark.read.text(sys.argv[1]).rdd\
         .map(lambda line: tuple(line[0].split(";")))\
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     vector = np.full(n, 1/n, dtype=float)
 
     print(vector)
-    
+
     for i in range(50):
         new_vector = matrix.flatMap(Map).groupByKey().map(Reduce)
         vector = new_vector.collectAsMap() 

@@ -23,7 +23,7 @@ def fraction_to_float(fraction):
 if __name__ == "__main__":
 
     global vector
-    spark = SparkSession.builder.appName("Matrix").getOrCreate()
+    spark = SparkSession.builder.appName("PageRank").getOrCreate()
 
     matrix = spark.read.text(sys.argv[1]).rdd\
         .map(lambda line: tuple(line[0].split(";")))\
